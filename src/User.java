@@ -20,10 +20,11 @@ public class User extends javax.swing.JFrame {
     /**
      * Creates new form ChatFirst
      */
-    Thread threadIn = null;
-    ChatServer cs = null;
-    Thread threadOut = null;
-    ChatClient cl = null;
+    Session session;
+    Thread serverThread;
+    ChatServer cs;
+    Thread clientThread;
+    ChatClient cl;
     
     public User() {
         initComponents();
@@ -192,11 +193,11 @@ public class User extends javax.swing.JFrame {
                 code = "ibm866";
             }
             cs = new ChatServer(Integer.parseInt(jTextField1.getText()), jTextArea1, jTextField2, code);
-            threadIn = new Thread(cs);
-            threadIn.start();
+            serverThread = new Thread(cs);
+            serverThread.start();
         } else {
             jToggleButton1.setText("Запустить");
-            if (threadIn.isAlive()) {
+            if (serverThread.isAlive()) {
                 try {               
                     cs.stop();
                     cs = null;
@@ -243,11 +244,11 @@ public class User extends javax.swing.JFrame {
         if (jToggleButton2.isSelected()) {
             jToggleButton2.setText("Отключиться");
             cl = new ChatClient(Integer.parseInt(jTextField3.getText()), jTextField4.getText(), jTextArea1, jTextField2);
-            threadOut = new Thread(cl);
-            threadOut.start();
+            clientThread = new Thread(cl);
+            clientThread.start();
         } else {
             jToggleButton2.setText("Подключиться");
-            if (threadOut.isAlive()) {
+            if (clientThread.isAlive()) {
                 try {
                     cl.stop();
                 } catch (IOException ex) {
